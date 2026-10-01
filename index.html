@@ -175,6 +175,11 @@
             <button class="nav-btn" data-page="customers" onclick="switchPage('customers')">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 Customers
+                <span class="nav-badge hidden" id="nav-badge-critical">0</span>
+            </button>
+            <button class="nav-btn" data-page="predict" onclick="switchPage('predict')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Predict
             </button>
             <button class="nav-btn" data-page="batch" onclick="switchPage('batch')">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -306,6 +311,103 @@
             </div>
         </section>
 
+        <!-- ── Predict Single Customer Page ── -->
+        <section class="page" id="page-predict">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Predict Single Customer</h1>
+                    <p class="page-subtitle">Enter customer attributes to get an instant churn probability and SHAP explanation</p>
+                </div>
+            </div>
+
+            <div class="predict-layout">
+                <!-- Form -->
+                <div class="predict-form-card">
+                    <h3>Customer Profile</h3>
+                    <form id="predict-form" onsubmit="handlePredictSubmit(event)" novalidate>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="pf-id">Customer ID <span style="color:var(--text-faint)">(optional)</span></label>
+                                <input class="form-input" id="pf-id" type="text" placeholder="e.g. CUST-00123">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-tenure">Tenure (months) *</label>
+                                <input class="form-input" id="pf-tenure" type="number" min="0" max="200" step="1" placeholder="e.g. 12" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-monthly">Monthly Charges ($) *</label>
+                                <input class="form-input" id="pf-monthly" type="number" min="0" step="0.01" placeholder="e.g. 79.90" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-total">Total Charges ($)</label>
+                                <input class="form-input" id="pf-total" type="number" min="0" step="0.01" placeholder="Auto-calculated">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-contract">Contract Type *</label>
+                                <select class="form-select" id="pf-contract" required>
+                                    <option value="Month-to-month">Month-to-month</option>
+                                    <option value="One year">One year</option>
+                                    <option value="Two year">Two year</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-payment">Payment Method *</label>
+                                <select class="form-select" id="pf-payment" required>
+                                    <option value="Electronic check">Electronic check</option>
+                                    <option value="Mailed check">Mailed check</option>
+                                    <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                                    <option value="Credit card (automatic)">Credit card (automatic)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-internet">Internet Service *</label>
+                                <select class="form-select" id="pf-internet" required>
+                                    <option value="Fiber optic">Fiber optic</option>
+                                    <option value="DSL">DSL</option>
+                                    <option value="No">No internet</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-tickets">Support Tickets</label>
+                                <input class="form-input" id="pf-tickets" type="number" min="0" max="50" step="1" placeholder="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-lastlogin">Last Login (days ago) *</label>
+                                <input class="form-input" id="pf-lastlogin" type="number" min="0" step="1" placeholder="e.g. 14" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="pf-usage">Usage Frequency (sessions/mo) *</label>
+                                <input class="form-input" id="pf-usage" type="number" min="0" step="0.1" placeholder="e.g. 35.0" required>
+                            </div>
+                        </div>
+
+                        <div class="predict-btn-row">
+                            <button type="submit" class="btn-predict" id="btn-predict-submit">
+                                <div class="predict-spinner" id="predict-spinner"></div>
+                                <svg id="predict-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                Predict Churn
+                            </button>
+                            <button type="button" class="btn-reset-form" onclick="resetPredictForm()">Reset</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Result panel -->
+                <div id="predict-result-panel">
+                    <div class="predict-result-card hidden" id="predict-result-card">
+                        <div class="result-churn-hero" id="result-hero"></div>
+                        <div id="result-body"></div>
+                    </div>
+                    <div class="predict-result-card" id="predict-result-empty">
+                        <div class="predict-empty-state">
+                            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.25"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            <p>Fill in the form and click <strong style="color:var(--text-secondary)">Predict Churn</strong> to see the result here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- ── Batch Upload Page ── -->
         <section class="page" id="page-batch">
             <div class="page-header">
@@ -384,6 +486,57 @@
         </section>
 
     </main>
+</div>
+
+<!-- ─── Log Intervention Modal ─── -->
+<div class="modal-overlay" id="modal-log-intervention" onclick="closeInterventionModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Log Intervention</h2>
+            <button class="btn-close" onclick="closeInterventionModal()" aria-label="Close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-form">
+            <div>
+                <label class="form-label" for="modal-customer-id-display">Customer</label>
+                <input class="form-input" id="modal-customer-id-display" readonly style="opacity:0.6;cursor:default">
+            </div>
+            <div>
+                <label class="form-label" for="modal-action-type">Action Type *</label>
+                <select class="form-select" id="modal-action-type">
+                    <option value="Proactive Support Outreach">Proactive Support Outreach</option>
+                    <option value="Contract Upgrade Incentive">Contract Upgrade Incentive</option>
+                    <option value="Loyalty Discount Offer">Loyalty Discount Offer</option>
+                    <option value="Re-engagement Email Campaign">Re-engagement Email Campaign</option>
+                    <option value="Personal Account Manager Assigned">Personal Account Manager Assigned</option>
+                    <option value="Win-back Discount">Win-back Discount</option>
+                    <option value="Service Review Call">Service Review Call</option>
+                    <option value="Billing Adjustment">Billing Adjustment</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label" for="modal-status">Initial Status</label>
+                <select class="form-select" id="modal-status">
+                    <option value="Pending">Pending</option>
+                    <option value="Sent">Sent</option>
+                    <option value="Responded">Responded</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label" for="modal-notes">Notes</label>
+                <textarea class="modal-textarea" id="modal-notes" placeholder="Optional notes about this intervention..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-reset-form" onclick="closeInterventionModal()">Cancel</button>
+            <button class="btn-predict" id="btn-modal-submit" onclick="submitInterventionModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Log Intervention
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- ─── Customer Detail Drawer ─── -->

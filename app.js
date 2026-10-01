@@ -310,6 +310,9 @@ function switchPage(pageName) {
     if (pageName === 'overview') loadOverview();
     if (pageName === 'customers') loadCustomers();
     if (pageName === 'interventions') loadInterventions();
+    if (pageName === 'predict') {
+        // nothing to load, it's a form
+    }
 }
 
 
@@ -330,11 +333,46 @@ async function loadOverview() {
 }
 
 function renderKPIs(s) {
-    document.getElementById('kpi-total').textContent = s.total_customers.toLocaleString();
-    document.getElementById('kpi-high-risk').textContent = `${s.high_risk_pct}%`;
-    document.getElementById('kpi-high-risk').style.color = s.high_risk_pct > 30 ? 'var(--danger)' : s.high_risk_pct > 15 ? 'var(--warning)' : 'var(--success)';
-    document.getElementById('kpi-revenue').textContent = `$${s.revenue_at_risk.toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:0})}`;
-    document.getElementById('kpi-avg-churn').textContent = `${(s.avg_churn_probability * 100).toFixed(1)}%`;
+    animateCount('kpi-total', s.total_customers, v => Math.round(v).toLocaleString());
+    animateCount('kpi-high-risk', s.high_risk_pct, v => `${v.toFixed(1)}%`);
+    const riskEl = document.getElementById('kpi-high-risk');
+    if (riskEl) riskEl.style.color = s.high_risk_pct > 30 ? 'var(--danger)' : s.high_risk_pct > 15 ? 'var(--warning)' : 'var(--success)';
+    animateCount('kpi-revenue', s.revenue_at_risk, v => `$${Math.round(v).toLocaleString()}`);
+    animateCount('kpi-avg-churn', s.avg_churn_probability * 100, v => `${v.toFixed(1)}%`);
+
+    // Update high-risk nav badge
+    const criticalCount = (s.risk_distribution || []).find(r => r.risk_tier === 'CRITICAL RISK')?.count || 0;
+    updateNavBadge(criticalCount);
+}
+
+function animateCount(elId, targetVal, formatter) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const start = 0;
+    const duration = 700;
+    const startTime = performance.now();
+    el.classList.remove('animated');
+    void el.offsetWidth; // reflow to restart animation
+    el.classList.add('animated');
+    function step(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = formatter(start + (targetVal - start) * eased);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = formatter(targetVal);
+    }
+    requestAnimationFrame(step);
+}
+
+function updateNavBadge(count) {
+    const badge = document.getElementById('nav-badge-critical');
+    if (!badge) return;
+    if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
 }
 
 function renderRiskChart(s) {
@@ -450,11 +488,16 @@ async function loadCustomers() {
     try {
         const data = await api('/customers?limit=500');
         state.customers = data.customers || [];
+        state.currentPage = 1;
         renderTable();
     } catch (err) {
         console.error('Failed to load customers:', err);
     }
 }
+
+// Pagination state
+if (!state.currentPage) state.currentPage = 1;
+const PAGE_SIZE = 15;
 
 function getFilteredCustomers() {
     let list = [...state.customers];
@@ -497,6 +540,12 @@ function renderTable() {
     }
     emptyEl.style.display = 'none';
 
+    // Pagination
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    if (state.currentPage > totalPages) state.currentPage = totalPages;
+    const start = (state.currentPage - 1) * PAGE_SIZE;
+    const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
     const html = `
         <table>
             <thead><tr>
@@ -512,7 +561,7 @@ function renderTable() {
                 <th></th>
             </tr></thead>
             <tbody>
-                ${filtered.map(c => `
+                ${pageItems.map(c => `
                     <tr onclick="openCustomerDetail('${c.customer_id}')">
                         <td class="customer-id">${c.customer_id}</td>
                         <td>${riskBadge(c.risk_tier)}</td>
@@ -528,17 +577,51 @@ function renderTable() {
                 `).join('')}
             </tbody>
         </table>
+        ${renderPagination(filtered.length, totalPages)}
     `;
     container.innerHTML = html;
 }
 
+function renderPagination(total, totalPages) {
+    if (totalPages <= 1) return '';
+    const cur = state.currentPage;
+    let pages = '';
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= cur - 1 && i <= cur + 1)) {
+            pages += `<button class="page-btn ${i === cur ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+        } else if (i === cur - 2 || i === cur + 2) {
+            pages += `<span style="color:var(--text-faint);padding:0 2px">…</span>`;
+        }
+    }
+    const startRow = (cur - 1) * PAGE_SIZE + 1;
+    const endRow = Math.min(cur * PAGE_SIZE, total);
+    return `
+        <div class="pagination-bar">
+            <span>Showing ${startRow}–${endRow} of ${total} customers</span>
+            <div class="pagination-controls">
+                <button class="page-btn" onclick="goToPage(${cur - 1})" ${cur === 1 ? 'disabled' : ''}>‹ Prev</button>
+                ${pages}
+                <button class="page-btn" onclick="goToPage(${cur + 1})" ${cur === totalPages ? 'disabled' : ''}>Next ›</button>
+            </div>
+        </div>
+    `;
+}
+
+function goToPage(n) {
+    state.currentPage = n;
+    renderTable();
+    document.getElementById('customer-table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function handleSearch(query) {
     state.searchQuery = query;
+    state.currentPage = 1;
     renderTable();
 }
 
 function handleRiskFilter(value) {
     state.riskFilter = value;
+    state.currentPage = 1;
     renderTable();
 }
 
@@ -546,6 +629,7 @@ function handleSortChange(value) {
     const [field, dir] = value.split(':');
     state.sortField = field;
     state.sortDir = dir;
+    state.currentPage = 1;
     renderTable();
 }
 
@@ -596,6 +680,12 @@ function renderDetailContent(data) {
                 </div>
             </div>
         </div>
+
+        <!-- Log Intervention Button -->
+        <button class="btn-log-intervention" onclick="openInterventionModal('${data.customer_id}')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Log Intervention
+        </button>
 
         <!-- Attributes -->
         <div class="detail-section">
