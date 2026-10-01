@@ -1,0 +1,13 @@
+[
+  "tests/test_api.py::test_auth_login_dynamic_corporate_user",
+  "tests/test_api.py::test_auth_login_invalid_email",
+  "tests/test_api.py::test_auth_login_predefined_user",
+  "tests/test_api.py::test_customers_list_and_filter",
+  "tests/test_api.py::test_intervene_full_lifecycle",
+  "tests/test_api.py::test_predict_high_risk_customer",
+  "tests/test_api.py::test_predict_low_risk_customer",
+  "tests/test_api.py::test_predict_validation_error",
+  "tests/test_api.py::test_recommender_rules",
+  "tests/test_api.py::test_root_endpoint",
+  "tests/test_api.py::test_single_customer_detail"
+]

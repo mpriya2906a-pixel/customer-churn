@@ -1,0 +1,51 @@
+customer_id,tenure,monthly_charges,total_charges,contract_type,payment_method,internet_service,support_tickets,last_login_days_ago,usage_frequency,churn_label,risk_tier,suggested_intervention
+1001,60,42.10,2526.00,Two year,Credit card,DSL,0,1,30,0,Low,None needed - loyal customer
+1002,55,38.75,2131.25,Two year,Bank transfer,DSL,0,2,29,0,Low,None needed - loyal customer
+1003,48,45.60,2188.80,Two year,Credit card,DSL,0,3,27,0,Low,None needed - loyal customer
+1004,50,40.25,2012.50,Two year,Bank transfer,Fiber optic,1,4,26,0,Low,Send loyalty appreciation note
+1005,44,49.30,2169.20,Two year,Credit card,DSL,0,2,28,0,Low,None needed - loyal customer
+1006,52,41.20,2142.40,Two year,Bank transfer,DSL,1,5,25,0,Low,Send loyalty appreciation note
+1007,58,39.60,2296.80,Two year,Credit card,Fiber optic,0,3,29,0,Low,None needed - loyal customer
+1008,36,56.40,2030.40,One year,Bank transfer,DSL,1,7,22,0,Medium,Offer contract renewal incentive
+1009,30,61.70,1851.00,One year,Credit card,Fiber optic,2,9,20,0,Medium,Offer contract renewal incentive
+1010,33,60.00,1980.00,One year,Bank transfer,DSL,1,8,21,0,Medium,Offer contract renewal incentive
+1011,28,64.90,1817.20,One year,Credit card,Fiber optic,2,10,19,0,Medium,Proactive check-in call
+1012,24,65.40,1569.60,One year,Bank transfer,DSL,2,11,18,0,Medium,Proactive check-in call
+1013,26,63.20,1643.20,One year,Credit card,Fiber optic,3,12,17,0,Medium,Proactive check-in call
+1014,20,70.80,1416.00,One year,Electronic check,Fiber optic,3,13,15,1,Medium,Offer usage-based discount
+1015,22,68.30,1502.60,One year,Bank transfer,DSL,2,10,16,0,Medium,Proactive check-in call
+1016,18,72.50,1305.00,Month-to-month,Electronic check,Fiber optic,3,14,14,0,Medium,Offer contract upgrade incentive
+1017,16,80.90,1294.40,Month-to-month,Electronic check,Fiber optic,3,16,13,1,High,Offer contract upgrade incentive
+1018,15,85.30,1279.50,Month-to-month,Mailed check,Fiber optic,4,18,12,1,High,Proactive support outreach
+1019,14,82.10,1149.40,Month-to-month,Electronic check,Fiber optic,4,17,11,1,High,Proactive support outreach
+1020,13,84.70,1101.10,Month-to-month,Electronic check,Fiber optic,4,19,10,0,High,Proactive support outreach
+1021,12,88.90,1066.80,Month-to-month,Mailed check,Fiber optic,4,20,9,1,High,Offer retention discount
+1022,12,86.40,1036.80,Month-to-month,Electronic check,Fiber optic,4,19,10,0,High,Proactive support outreach
+1023,11,87.20,959.20,Month-to-month,Electronic check,Fiber optic,4,20,8,1,High,Offer retention discount
+1024,10,89.60,896.00,Month-to-month,Mailed check,Fiber optic,5,21,7,1,High,Offer retention discount
+1025,9,91.60,824.40,Month-to-month,Electronic check,Fiber optic,5,22,6,1,High,Offer retention discount
+1026,9,92.80,835.20,Month-to-month,Mailed check,Fiber optic,5,23,6,0,High,Offer retention discount
+1027,8,95.75,766.00,Month-to-month,Electronic check,Fiber optic,5,24,5,1,Critical,Urgent retention call + discount
+1028,7,93.50,654.50,Month-to-month,Mailed check,Fiber optic,5,24,5,1,Critical,Urgent retention call + discount
+1029,6,98.40,590.40,Month-to-month,Electronic check,Fiber optic,6,26,4,1,Critical,Urgent retention call + discount
+1030,6,101.20,607.20,Month-to-month,Electronic check,Fiber optic,6,27,4,1,Critical,Urgent retention call + discount
+1031,5,110.20,551.00,Month-to-month,Electronic check,Fiber optic,7,29,2,1,Critical,Escalate to account manager
+1032,5,112.70,563.50,Month-to-month,Mailed check,Fiber optic,6,27,3,1,Critical,Urgent retention call + discount
+1033,4,105.80,423.20,Month-to-month,Mailed check,Fiber optic,7,28,3,1,Critical,Escalate to account manager
+1034,4,108.30,433.20,Month-to-month,Electronic check,Fiber optic,7,28,3,1,Critical,Escalate to account manager
+1035,3,102.30,306.90,Month-to-month,Electronic check,Fiber optic,6,30,1,1,Critical,Escalate to account manager
+1036,3,115.40,346.20,Month-to-month,Electronic check,Fiber optic,8,29,1,1,Critical,Escalate to account manager
+1037,2,89.50,179.00,Month-to-month,Electronic check,Fiber optic,5,25,2,1,Critical,Urgent retention call + discount
+1038,2,99.90,199.80,Month-to-month,Electronic check,Fiber optic,6,30,2,1,Critical,Escalate to account manager
+1039,2,116.90,233.80,Month-to-month,Electronic check,Fiber optic,8,30,1,1,Critical,Escalate to account manager
+1040,1,118.60,118.60,Month-to-month,Electronic check,Fiber optic,7,31,1,1,Critical,Escalate to account manager
+1041,1,120.00,120.00,Month-to-month,Electronic check,Fiber optic,8,31,1,1,Critical,Escalate to account manager
+1042,42,49.30,2070.60,Two year,Credit card,DSL,0,4,24,0,Low,None needed - loyal customer
+1043,38,56.40,2143.20,One year,Bank transfer,DSL,1,5,22,0,Medium,Offer contract renewal incentive
+1044,35,59.80,2093.00,One year,Bank transfer,DSL,1,6,20,0,Medium,Proactive check-in call
+1045,31,63.20,1959.20,One year,Bank transfer,DSL,1,7,20,0,Medium,Offer contract renewal incentive
+1046,27,66.10,1784.70,One year,Bank transfer,DSL,1,9,19,0,Medium,Proactive check-in call
+1047,23,67.50,1552.50,One year,Electronic check,Fiber optic,2,10,17,0,Medium,Proactive check-in call
+1048,19,74.20,1409.80,Month-to-month,Electronic check,Fiber optic,3,13,14,0,Medium,Offer contract upgrade incentive
+1049,17,78.60,1336.20,Month-to-month,Electronic check,Fiber optic,3,15,13,1,High,Offer contract upgrade incentive
+1050,15,83.90,1258.50,Month-to-month,Mailed check,Fiber optic,4,18,12,0,High,Proactive support outreach

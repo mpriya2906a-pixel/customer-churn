@@ -1,0 +1,4 @@
+customer_id,tenure,monthly_charges,total_charges,contract_type,payment_method,internet_service,support_tickets,last_login_days_ago,usage_frequency
+WALKTHROUGH-001,4,89.20,356.80,Month-to-month,Electronic check,Fiber optic,3,25,22.0
+WALKTHROUGH-002,48,42.00,2016.00,Two year,Bank transfer (automatic),DSL,0,3,65.0
+WALKTHROUGH-003,12,78.50,942.00,One year,Credit card (automatic),Fiber optic,2,15,40.0
